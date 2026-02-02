@@ -1,4 +1,23 @@
-/* style.css - romantic theme for the Valentine's page */
+/* style.css - romantic them.annoying-container{position:relative;height:220px}
+.button-container{position:relative;height:120px}
+.button-container .cute-btn{position:relative}
+
+#noBtn{background:linear-gradient(135deg,#ffd166,#ffb3a7);color:#3a1020}
+#yesBtn{background:linear-gradient(135deg,#9be7ff,#7bd389);color:#07231a}
+
+#result-message{margin-top:12px;font-style:italic;animation:fadeInUp 0.5s ease}
+#result-message.good{color:#ffd1ea}
+
+@keyframes fadeInUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+.proposal-container{text-align:center;padding:40px}
+.big-text{font-size:32px;margin:0;animation:heartBeat 1.5s ease-in-out}
+.proposal-text{font-size:20px;animation:fadeIn 0.8s ease 0.3s both}
+.hidden-text{display:block;margin-top:10px;color:#ffdfe9;animation:slideUp 0.6s ease}
+
+@keyframes heartBeat{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}ntine's page */
 
 :root{--bg:#0b1020;--card:#111827;--accent:#ff5c8a;--muted:#f3e7f6}
 *{box-sizing:border-box;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif}
@@ -12,12 +31,19 @@ section{padding:30px;border-radius:12px;margin-bottom:18px;background:linear-gra
 .message-box{text-align:center;padding:40px}
 .typewriter{font-size:36px;margin:0 0 10px}
 .fade-in{opacity:0.95}
-.cute-btn{background:linear-gradient(90deg,var(--accent),#ff8fb1);border:none;padding:12px 20px;border-radius:999px;color:#1a0526;font-weight:700;cursor:pointer;margin:6px;transition:transform .18s ease, box-shadow .18s ease}
-.cute-btn:active{transform:scale(.98)}
+.cute-btn{background:linear-gradient(135deg,var(--accent),#ff8fb1);border:none;padding:14px 28px;border-radius:999px;color:#1a0526;font-weight:700;cursor:pointer;margin:6px;transition:all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);box-shadow:0 4px 15px rgba(255,92,138,0.4);position:relative;overflow:hidden}
+.cute-btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:rgba(255,255,255,0.2);transition:left 0.35s ease;border-radius:999px}
+.cute-btn:hover::before{left:100%}
+.cute-btn:hover{transform:translateY(-3px);box-shadow:0 8px 25px rgba(255,92,138,0.6)}
+.cute-btn:active{transform:translateY(-1px)}
 
-.reasons-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
-.reason-card{background:rgba(255,255,255,0.03);padding:12px;border-radius:10px;text-align:center}
-.heart-icon{font-size:22px;display:block}
+.reasons-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:18px;padding:20px}
+.reason-card{background:linear-gradient(135deg,rgba(255,92,138,0.15),rgba(255,139,177,0.08));padding:24px;border-radius:15px;text-align:center;border:1px solid rgba(255,92,138,0.3);transition:all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);cursor:pointer;position:relative;overflow:hidden}
+.reason-card::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:radial-gradient(circle,rgba(255,255,255,0.1),transparent);transition:left 0.4s ease}
+.reason-card:hover::before{left:100%}
+.reason-card:hover{transform:translateY(-8px) scale(1.05);box-shadow:0 12px 28px rgba(255,92,138,0.4);border-color:rgba(255,92,138,0.6)}
+.heart-icon{font-size:32px;display:block;margin-bottom:12px;transition:transform 0.3s ease}
+.reason-card:hover .heart-icon{transform:scale(1.3) rotate(5deg)}
 
 .annoying-container{position:relative;height:220px}
 .button-container{position:relative;height:120px}
@@ -40,15 +66,21 @@ section{padding:30px;border-radius:12px;margin-bottom:18px;background:linear-gra
 @keyframes fall{0%{transform:translateY(-20px) rotate(0)}100%{transform:translateY(200px) rotate(540deg);opacity:0}}
 
 /* small responsive tweaks */
-@media (max-width:520px){.container{padding:10px}.typewriter{font-size:26px}}
+@media (max-width:520px){.container{padding:10px}.typewriter{font-size:26px}.reason-card{padding:16px}.heart-icon{font-size:24px}}
 
 /* subtle floating hearts */
 .floating-hearts::before{content:'💖';position:absolute;left:12%;top:-10px;font-size:24px;opacity:.9;animation:floaty 3s ease-in-out infinite}
 .floating-hearts::after{content:'✨';position:absolute;right:12%;top:-6px;font-size:20px;opacity:.8;animation:floaty 4s ease-in-out infinite}
-@keyframes floaty{0%{transform:translateY(0)}50%{transform:translateY(-8px)}100%{transform:translateY(0)}}
+@keyframes floaty{0%{transform:translateY(0) scale(1)}50%{transform:translateY(-12px) scale(1.1)}100%{transform:translateY(0) scale(1)}}
 
 /* small heart confetti for background when success */
-.success-container .love-message p{margin:6px 0}
+.success-container .love-message p{margin:8px 0;font-size:18px;line-height:1.6;animation:slideUp 0.8s ease backwards}
+.success-container .love-message p:nth-child(1){animation-delay:0.2s}
+.success-container .love-message p:nth-child(2){animation-delay:0.4s}
+.success-container .love-message p:nth-child(3){animation-delay:0.6s}
+
+.celebration-text{font-size:48px;animation:bounce 0.8s ease;margin:20px 0}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-20px)}}
 
 /* ensure buttons don't overflow on small screens */
 .button-container .cute-btn{min-width:100px}

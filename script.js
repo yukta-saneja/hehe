@@ -22,18 +22,26 @@ function showSection(idx) {
     currentIndex = idx;
 }
 
-// --- Fun facts ---
+// --- Romantic facts ---
 const facts = [
-    "You make my heart skip a beat every time you smile.",
-    "Thinking of you turns ordinary days into adventures.",
-    "Your laugh is my favorite song.",
-    "With you, even silence feels like a warm hug.",
-    "You are the reason for my best days."
+    "You make my heart skip a beat every single time I see you smile.",
+    "Thinking of you turns my ordinary days into magical adventures.",
+    "Your laugh is the most beautiful symphony my heart could ever hear.",
+    "With you, even the quietest moments feel like warm, peaceful hugs.",
+    "You are the reason every one of my days feels like a blessing.",
+    "My heart chose you before my mind even understood why.",
+    "Being with you feels like coming home to where I belong.",
+    "You've turned my life into a beautiful love story worth living forever.",
+    "Every time you're near, the world fades away and only you matter.",
+    "You are my greatest love, my deepest wish, my greatest adventure."
 ];
 
 function showRandomFact() {
     const p = document.getElementById('fact-display');
-    p.textContent = facts[Math.floor(Math.random() * facts.length)];
+    const randomFact = facts[Math.floor(Math.random() * facts.length)];
+    p.textContent = randomFact;
+    p.style.animation = 'none';
+    setTimeout(() => { p.style.animation = 'slideUp 0.5s ease'; }, 10);
 }
 
 // --- No button avoidance & Yes growth ---
@@ -76,12 +84,12 @@ function youSaid(choice) {
     const res = document.getElementById('result-message');
     if (choice === 'yes') {
         // celebrate and move to proposal
-        res.textContent = "You chose LOVE — I knew it! 💖";
+        res.textContent = "I knew it! Your heart is as beautiful as I always knew. 💖";
         res.classList.add('good');
         setTimeout(() => showSection(4), 900);
     } else {
         // if NO somehow clicked, playful tease and nudge back
-        res.textContent = "No? Hmm... try again 😊";
+        res.textContent = "Hmm, you almost got me there! Try again, my love 😊";
         res.classList.remove('good');
         // slightly shrink the NO button as a playful consequence
         const btn = document.getElementById('noBtn');
@@ -99,18 +107,22 @@ function sheYes() {
 function maybeWho() {
     const msg = document.getElementById('proposal-message');
     msg.classList.remove('hidden-text');
-    msg.textContent = "If you'd like, tell me one thing you love about us and I'll keep it forever. 💌";
+    msg.textContent = "I'm asking because you mean the world to me, Yukta. Because loving you is the best decision I could ever make. 💌";
 }
 
 // --- Simple confetti/hearts ---
 function startConfetti() {
     const container = document.querySelector('.celebration-confetti');
     container.innerHTML = '';
-    for (let i = 0; i < 30; i++) {
+    const confettiEmojis = ['💕', '💖', '✨', '🌹', '💝', '💐', '🎀', '💞', '⭐', '💑'];
+    
+    for (let i = 0; i < 40; i++) {
         const el = document.createElement('div');
         el.className = 'confetti';
+        el.textContent = confettiEmojis[Math.floor(Math.random() * confettiEmojis.length)];
         el.style.left = Math.random() * 100 + '%';
-        el.style.background = ['#ff5c8a', '#ffd166', '#9ad3bc'][Math.floor(Math.random() * 3)];
+        el.style.fontSize = (12 + Math.random() * 16) + 'px';
+        el.style.background = 'transparent';
         el.style.transform = `rotate(${Math.random() * 360}deg)`;
         container.appendChild(el);
         // remove after animation
@@ -127,7 +139,7 @@ window.addEventListener('load', () => {
     // small pulsing on the yes button occasionally
     setInterval(() => {
         const yes = document.getElementById('yesBtn');
-        yes.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.05)' }, { transform: 'scale(1)' }], { duration: 1500 });
-    }, 2500);
+        yes.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.08)' }, { transform: 'scale(1)' }], { duration: 1500 });
+    }, 3000);
 });
 
