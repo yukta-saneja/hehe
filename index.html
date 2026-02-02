@@ -22,31 +22,56 @@
         <!-- Why I Love You Section -->
         <section class="hidden" id="reasons">
             <div class="reasons-container">
-                <h2>Why I Love You 💕</h2>
+                <h2 class="reasons-title">Why I Love You 💕</h2>
+                <p class="reasons-intro">Click each one to reveal my heart...</p>
                 <div class="reasons-grid">
-                    <div class="reason-card">
-                        <span class="heart-icon">💕</span>
-                        <p>Your smile makes my day brighter</p>
+                    <div class="reason-card" onclick="revealReason(this)" data-index="0">
+                        <div class="card-front">
+                            <span class="heart-icon">💕</span>
+                        </div>
+                        <div class="card-back">
+                            <p>Your smile makes my day brighter</p>
+                        </div>
                     </div>
-                    <div class="reason-card">
-                        <span class="heart-icon">😊</span>
-                        <p>Your laugh is my favorite sound</p>
+                    <div class="reason-card" onclick="revealReason(this)" data-index="1">
+                        <div class="card-front">
+                            <span class="heart-icon">😊</span>
+                        </div>
+                        <div class="card-back">
+                            <p>Your laugh is my favorite sound</p>
+                        </div>
                     </div>
-                    <div class="reason-card">
-                        <span class="heart-icon">✨</span>
-                        <p>You inspire me to be better</p>
+                    <div class="reason-card" onclick="revealReason(this)" data-index="2">
+                        <div class="card-front">
+                            <span class="heart-icon">✨</span>
+                        </div>
+                        <div class="card-back">
+                            <p>You inspire me to be better</p>
+                        </div>
                     </div>
-                    <div class="reason-card">
-                        <span class="heart-icon">🌟</span>
-                        <p>Your kindness is endless</p>
+                    <div class="reason-card" onclick="revealReason(this)" data-index="3">
+                        <div class="card-front">
+                            <span class="heart-icon">🌟</span>
+                        </div>
+                        <div class="card-back">
+                            <p>Your kindness is endless</p>
+                        </div>
                     </div>
-                    <div class="reason-card">
-                        <span class="heart-icon">🎯</span>
-                        <p>You're my perfect match</p>
+                    <div class="reason-card" onclick="revealReason(this)" data-index="4">
+                        <div class="card-front">
+                            <span class="heart-icon">🎯</span>
+                        </div>
+                        <div class="card-back">
+                            <p>You're my perfect match</p>
+                        </div>
                     </div>
-                    <div class="reason-card">
-                        <span class="heart-icon">👑</span>
-                        <p>You're my queen, always</p>
+                    <div class="reason-card" onclick="revealReason(this)" data-index="5">
+                        <div class="card-front">
+                            <span class="heart-icon">👑</span>
+                        </div>
+                        <div class="card-back">
+                            <p>You're my queen, always</p>
+                        </div>
                     </div>
                 </div>
                 <button class="cute-btn" onclick="nextSection()">Next 💝</button>
@@ -86,9 +111,10 @@
                 <p class="proposal-text">Will you be my Valentine? I have always imagined saying this to you.</p>
                 <div class="proposal-buttons">
                     <button class="cute-btn yes-proposal" onclick="sheYes()">YES YES YES! 💕</button>
-                    <button class="cute-btn maybe-btn" onclick="maybeWho()">Maybe 😊</button>
+                    <button class="cute-btn surprise-btn" onclick="surpriseMe()">Surprise Me 🎁</button>
                 </div>
                 <p id="proposal-message" class="hidden-text"></p>
+                <div id="surprise-display" class="surprise-box hidden-text"></div>
                 <div class="reply-box" style="margin-top:14px;">
                     <input id="replyInput" placeholder="Write a sweet line..." style="padding:8px 10px;border-radius:8px;border:none;min-width:220px;"> 
                     <button class="cute-btn" onclick="sendReply()">Send 💌</button>

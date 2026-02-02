@@ -64,6 +64,11 @@ function showRandomFact() {
     p.textContent = facts[Math.floor(Math.random() * facts.length)];
 }
 
+// --- Reason card reveal animation ---
+function revealReason(card) {
+    card.classList.toggle('revealed');
+}
+
 // --- No button avoidance & Yes growth ---
 let yesSize = 1; // scale multiplier
 let noAttempts = 0;
