@@ -1,172 +1,96 @@
-// script.js - interactive behaviors for the Valentine's page
+let currentStep = 0;
+const sections = ['login', 'intro', 'reasons', 'facts', 'annoying', 'proposal', 'success'];
 
-// --- Lightweight navigation between sections ---
-const sections = ['intro', 'reasons', 'facts', 'annoying', 'proposal', 'success'];
-let currentIndex = 0;
+function checkPassword() {
+    const pwd = document.getElementById('passwordField').value.toLowerCase().replace(/[\/\s-]/g, '');
+    if (pwd === '10062020' || pwd === '10june2020') {
+        document.getElementById('login').classList.add('hidden');
+        document.getElementById('musicUI').classList.remove('hidden');
+        currentStep = 1; 
+        const intro = document.getElementById('intro');
+        intro.classList.remove('hidden');
+        setTimeout(() => { intro.style.opacity = '1'; }, 50);
+    } else {
+        const error = document.getElementById('error-msg');
+        error.classList.remove('hidden');
+        document.getElementById('login').style.animation = "shake 0.3s";
+        setTimeout(() => { document.getElementById('login').style.animation = ""; }, 300);
+    }
+}
 
-function startJourney() {
-    showSection(1); // go to reasons
+function startExperience() {
+    const music = document.getElementById('bgMusic');
+    music.play().then(() => {
+        document.getElementById('musicToggle').textContent = "⏸ Playing: Stereo Hearts";
+    }).catch(e => console.log("Audio waiting..."));
+    nextSection();
 }
 
 function nextSection() {
-    showSection(currentIndex + 1);
+    const current = document.getElementById(sections[currentStep]);
+    current.style.opacity = '0';
+    setTimeout(() => {
+        current.classList.add('hidden');
+        currentStep++;
+        const next = document.getElementById(sections[currentStep]);
+        next.classList.remove('hidden');
+        setTimeout(() => { next.style.opacity = '1'; }, 50);
+    }, 400);
 }
 
-function showSection(idx) {
-    if (idx < 0 || idx >= sections.length) return;
-    // hide all
-    sections.forEach(id => document.getElementById(id).classList.add('hidden'));
-    // show target
-    const el = document.getElementById(sections[idx]);
-    if (el) el.classList.remove('hidden');
-    currentIndex = idx;
-    
-    // Add click-to-reveal functionality for reason cards
-    if (idx === 1) {
-        setTimeout(() => {
-            const cards = document.querySelectorAll('.reason-card');
-            cards.forEach((card, index) => {
-                card.style.animation = `none`;
-                card.onclick = () => {
-                    card.classList.toggle('revealed');
-                };
-            });
-        }, 100);
-    }
+function toggleMusic() {
+    const m = document.getElementById('bgMusic');
+    const b = document.getElementById('musicToggle');
+    if (m.paused) { m.play(); b.textContent = "⏸ Playing: Stereo Hearts"; }
+    else { m.pause(); b.textContent = "🎵 Music: Off"; }
 }
 
-// --- Romantic facts ---
-const facts = [
-    "You make my heart skip a beat every single time I see you smile.",
-    "Thinking of you turns my ordinary days into magical adventures.",
-    "Your laugh is the most beautiful symphony my heart could ever hear.",
-    "With you, even the quietest moments feel like warm, peaceful hugs.",
-    "You are the reason every one of my days feels like a blessing.",
-    "My heart chose you before my mind even understood why.",
-    "Being with you feels like coming home to where I belong.",
-    "You've turned my life into a beautiful love story worth living forever.",
-    "Every time you're near, the world fades away and only you matter.",
-    "You are my greatest love, my deepest wish, my greatest adventure."
-];
+function revealCard(card) { card.classList.add('revealed'); }
 
-function showRandomFact() {
-    const p = document.getElementById('fact-display');
-    const randomFact = facts[Math.floor(Math.random() * facts.length)];
-    p.textContent = randomFact;
-    p.style.animation = 'none';
-    setTimeout(() => { p.style.animation = 'slideUp 0.5s ease'; }, 10);
-}
-
-// --- No button avoidance & Yes growth ---
-let yesSize = 1; // scale multiplier
-let noAttempts = 0;
-
-function moveButton(e) {
-    // Called on mouseover of NO button. Move it to a random nearby position.
+function moveButton() {
     const btn = document.getElementById('noBtn');
-    noAttempts += 1;
-
-    // Get the parent container bounds (button-container)
-    const parent = btn.parentElement.getBoundingClientRect();
-    
-    // Constrain movement within the parent container
-    const safeArea = {
-        left: parent.left,
-        top: parent.top,
-        right: parent.right - btn.offsetWidth,
-        bottom: parent.bottom - btn.offsetHeight
-    };
-
-    // pick a new location within the parent container
-    const x = Math.max(safeArea.left, Math.min(safeArea.right, parent.left + Math.random() * (parent.width - btn.offsetWidth)));
-    const y = Math.max(safeArea.top, Math.min(safeArea.bottom, parent.top + Math.random() * (parent.height - btn.offsetHeight)));
-
+    const pad = 80; // Increased padding for safety
+    const x = Math.floor(Math.random() * (window.innerWidth - btn.offsetWidth - pad)) + pad/2;
+    const y = Math.floor(Math.random() * (window.innerHeight - btn.offsetHeight - pad)) + pad/2;
     btn.style.position = 'fixed';
     btn.style.left = x + 'px';
     btn.style.top = y + 'px';
-
-    // Make the YES button grow a bit every time the NO button dodges
-    growYes();
-}
-
-function growYes() {
-    // gently increase yesSize but clamp it so it doesn't grow unbounded
-    yesSize = Math.min(1.8, yesSize + 0.06); // max 1.8x
     const yes = document.getElementById('yesBtn');
-    if (!yes) return;
-    // apply scale using CSS variable so other transforms (translateY) can compose
-    yes.style.setProperty('--scale', yesSize.toFixed(3));
+    const size = parseFloat(window.getComputedStyle(yes).fontSize);
+    if (size < 45) yes.style.fontSize = (size + 1.5) + 'px';
 }
 
-function youSaid(choice) {
-    const res = document.getElementById('result-message');
-    if (choice === 'yes') {
-        // celebrate and move to proposal
-        res.textContent = "I knew it! Your heart is as beautiful as I always knew. 💖";
-        res.classList.add('good');
-        setTimeout(() => showSection(4), 900);
-    } else {
-        // if NO somehow clicked, playful tease and nudge back
-        res.textContent = "Hmm, you almost got me there! Try again, my love 😊";
-        res.classList.remove('good');
-        // slightly shrink the NO button as a playful consequence
-        const btn = document.getElementById('noBtn');
-        btn.style.transform = 'scale(0.9)';
-        setTimeout(() => { btn.style.transform = ''; moveButton(); }, 300);
-    }
+const truths = [
+    "I still remember the exact moment I realized you were the one.",
+    "Sometimes I catch myself smiling just thinking about your laugh.",
+    "My favorite place in the world is right next to you.",
+    "I love the person I am when I'm with you, Yukta.",
+    "Your happiness is the only thing that truly matters to me."
+];
+
+function showRandomFact() {
+    document.getElementById('typewriter-text').textContent = truths[Math.floor(Math.random() * truths.length)];
 }
 
-// --- Proposal actions ---
-function sheYes() {
-    showSection(5);
-    startConfetti();
-}
+function youSaid(a) { if(a === 'yes') nextSection(); }
+function sheYes() { nextSection(); startConfetti(); }
 
-function maybeWho() {
-    const msg = document.getElementById('proposal-message');
-    msg.classList.remove('hidden-text');
-    msg.textContent = "I'm asking because you mean the world to me, Yukta. Because loving you is the best decision I could ever make. 💌";
-}
-
-// --- Simple confetti/hearts ---
 function startConfetti() {
-    const container = document.querySelector('.celebration-confetti');
-    container.innerHTML = '';
-    const confettiEmojis = ['💕', '💖', '✨', '🌹', '💝', '💐', '🎀', '💞', '⭐', '💑'];
-    
-    for (let i = 0; i < 40; i++) {
-        const el = document.createElement('div');
-        el.className = 'confetti';
-        el.textContent = confettiEmojis[Math.floor(Math.random() * confettiEmojis.length)];
-        el.style.left = Math.random() * 100 + '%';
-        el.style.fontSize = (12 + Math.random() * 16) + 'px';
-        el.style.background = 'transparent';
-        el.style.transform = `rotate(${Math.random() * 360}deg)`;
-        container.appendChild(el);
-        // remove after animation
-        setTimeout(() => el.remove(), 4000);
+    for (let i = 0; i < 70; i++) {
+        const h = document.createElement('div');
+        h.innerHTML = '❤️';
+        h.style.position = 'fixed';
+        h.style.left = Math.random() * 100 + 'vw';
+        h.style.top = '-10%';
+        h.style.fontSize = Math.random() * 20 + 12 + 'px';
+        h.style.animation = `fall ${Math.random() * 3 + 2}s linear forwards`;
+        document.body.appendChild(h);
     }
 }
 
-// --- Page polish on load ---
-window.addEventListener('load', () => {
-    // show intro only
-    sections.forEach(id => document.getElementById(id).classList.add('hidden'));
-    document.getElementById('intro').classList.remove('hidden');
-
-    // small pulsing on the yes button occasionally — animate a temporary overlay pulse
-    setInterval(() => {
-        const yes = document.getElementById('yesBtn');
-        // animate using composite transform that includes the current CSS variable --scale
-        // We cannot directly animate CSS variables with WAAPI, so we simulate a subtle pulse by animating a transient scale multiplier
-        const base = parseFloat(getComputedStyle(yes).getPropertyValue('--scale')) || 1;
-        const pulseUp = base * 1.06;
-        const animation = yes.animate([
-            { transform: `translateY(var(--ty,0)) scale(${base})` },
-            { transform: `translateY(var(--ty,0)) scale(${pulseUp})` },
-            { transform: `translateY(var(--ty,0)) scale(${base})` }
-        ], { duration: 1200, easing: 'ease-in-out' });
-        // no need to change CSS var; animation is transient
-    }, 3000);
-});
-
+const style = document.createElement('style');
+style.innerHTML = `
+@keyframes shake { 0%, 100% {transform: translateX(0);} 25% {transform: translateX(-10px);} 75% {transform: translateX(10px);} }
+@keyframes fall { to { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
+`;
+document.head.appendChild(style);

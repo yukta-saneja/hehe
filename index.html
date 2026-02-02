@@ -2,108 +2,101 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For My Love, Yukta ❤️</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>For Yukta ❤️</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="stars"></div>
+    <div class="background-animate"></div>
     
+    <div class="music-controls hidden" id="musicUI">
+        <button id="musicToggle" onclick="toggleMusic()">🎵 Music: Off</button>
+        <audio id="bgMusic" loop preload="auto">
+            <source src="stereo-hearts.mp3" type="audio/mp3">
+        </audio>
+    </div>
+
     <div class="container">
-        <!-- Intro Section -->
-        <section class="intro" id="intro">
+        <section id="login">
             <div class="message-box">
-                <h1 class="typewriter">Hi Yukta! 💕</h1>
-                <p class="fade-in">I've been waiting for the perfect moment to tell you something... and that moment is now.</p>
-                <button class="cute-btn" onclick="startJourney()">Let's Begin 🎀</button>
+                <h1 class="handwritten">Locked with Love... 🔒</h1>
+                <p class="spacing-p">Enter our special date to continue</p>
+                <div class="input-group">
+                    <input type="text" id="passwordField" placeholder="DDMMYYYY or Date" autocomplete="off">
+                    <button class="cute-btn" onclick="checkPassword()">Unlock 🔑</button>
+                </div>
+                <p id="error-msg" class="error hidden">That's not it, try again! ❤️</p>
             </div>
         </section>
 
-        <!-- Why I Love You Section -->
+        <section class="hidden" id="intro">
+            <div class="message-box">
+                <h1 class="handwritten">Hi Yukta... 💕</h1>
+                <p class="fade-in spacing-p">I built this little corner of the internet just for you.</p>
+                <button class="cute-btn primary pulse" onclick="startExperience()">Unlock My Heart 💌</button>
+            </div>
+        </section>
+
         <section class="hidden" id="reasons">
-            <div class="reasons-container">
-                <h2>Why You Mean Everything to Me 💕</h2>
-                <div class="reasons-grid">
-                    <div class="reason-card">
-                        <span class="heart-icon">💕</span>
-                        <p>Your smile lights up the darkest corners of my world</p>
-                    </div>
-                    <div class="reason-card">
-                        <span class="heart-icon">😊</span>
-                        <p>Your laughter is the most beautiful melody I've ever heard</p>
-                    </div>
-                    <div class="reason-card">
-                        <span class="heart-icon">✨</span>
-                        <p>You inspire me to become the best version of myself</p>
-                    </div>
-                    <div class="reason-card">
-                        <span class="heart-icon">🌟</span>
-                        <p>Your kindness makes the world a better place</p>
-                    </div>
-                    <div class="reason-card">
-                        <span class="heart-icon">🎯</span>
-                        <p>With you, I found my missing piece, my perfect match</p>
-                    </div>
-                    <div class="reason-card">
-                        <span class="heart-icon">👑</span>
-                        <p>You are my queen, my dream, my forever person</p>
-                    </div>
+            <h2 class="handwritten">To My Everything...</h2>
+            <p class="subtitle spacing-p">Time is measured in years, but with you, I measure it in the moments that take my breath away.</p>
+            <div class="reasons-grid">
+                <div class="reason-card" onclick="revealCard(this)">
+                    <span class="heart-icon">🫂</span>
+                    <p>The way the world feels quieter and safer just by having you in it.</p>
                 </div>
-                <button class="cute-btn" onclick="nextSection()">More Magic Awaits 💝</button>
+                <div class="reason-card" onclick="revealCard(this)">
+                    <span class="heart-icon">✨</span>
+                    <p>The way you are my "favorite thought"—the one I reach for the moment I wake up and the last one on my mind before I sleep.</p>
+                </div>
+                <div class="reason-card" onclick="revealCard(this)">
+                    <span class="heart-icon">☕</span>
+                    <p>How you're the first person I want to tell everything to, no matter how small it is.</p>
+                </div>
+                <div class="reason-card" onclick="revealCard(this)">
+                    <span class="heart-icon">🌟</span>
+                    <p>The way you believe in me even on the days I find it hard to believe in myself.</p>
+                </div>
             </div>
+            <button class="cute-btn secondary" onclick="nextSection()">Next Chapter... 📖</button>
         </section>
 
-        <!-- Fun Facts Section -->
         <section class="hidden" id="facts">
-            <div class="facts-container">
-                <h2>Some Truths About Us 🤓</h2>
-                <div class="facts-box">
-                    <p id="fact-display">Click to reveal what makes our love special...</p>
-                    <button class="cute-btn" onclick="showRandomFact()">Reveal a Truth 💡</button>
-                </div>
-                <button class="cute-btn" onclick="nextSection()">I Have More to Say 💗</button>
+            <h2 class="handwritten">Confessions...</h2>
+            <div class="facts-box">
+                <div id="typewriter-text" class="typewriter-container">Click for a secret confession...</div>
+                <button class="cute-btn" onclick="showRandomFact()">Reveal 💡</button>
             </div>
+            <button class="cute-btn secondary" onclick="nextSection()">One More Thing 💗</button>
         </section>
 
-        <!-- The Annoying Part (Playful Pop-ups) -->
         <section class="hidden" id="annoying">
-            <div class="annoying-container">
-                <h2>Now, A Little Game 😄</h2>
-                <p>Let's see if you can resist me... 😉</p>
-                <div class="button-container">
-                    <button class="cute-btn yes-btn" id="yesBtn" onclick="youSaid('yes')">YES! 💚</button>
-                    <button class="cute-btn no-btn" id="noBtn" onmouseover="moveButton(event)" ontouchstart="moveButton(event); return false;" onclick="youSaid('no')">Maybe �</button>
-                </div>
-                <p id="result-message"></p>
+            <h2 class="handwritten">Wait! One Test...</h2>
+            <p class="spacing-p">Do you know how much I love you? 😉</p>
+            <div class="button-container">
+                <button class="cute-btn yes-btn" id="yesBtn" onclick="youSaid('yes')">YES! 💚</button>
+                <button class="cute-btn no-btn" id="noBtn" onmouseover="moveButton()" ontouchstart="moveButton()">Maybe? 🙄</button>
             </div>
         </section>
 
-        <!-- The Final Ask -->
         <section class="hidden" id="proposal">
             <div class="proposal-container">
-                <div class="floating-hearts"></div>
-                <h2 class="big-text">Yukta... 💕</h2>
-                <p class="proposal-text">Will you be my Valentine and make me the luckiest person alive?</p>
+                <h2 class="big-text handwritten">Yukta... 💕</h2>
+                <p class="proposal-text spacing-p">"My heart's a stereo, it beats for you, so listen close... make me your radio."</p>
+                <p class="question spacing-p">Will you be my Valentine?</p>
                 <div class="proposal-buttons">
-                    <button class="cute-btn yes-proposal" onclick="sheYes()">YES! I Will! 💕</button>
-                    <button class="cute-btn maybe-btn" onclick="maybeWho()">Ask Me Again 😊</button>
+                    <button class="cute-btn yes-proposal" onclick="sheYes()">Yes, Always! 💍</button>
+                    <button class="cute-btn maybe-btn" onclick="maybeWho()">Ask Again? 😊</button>
                 </div>
-                <p id="proposal-message" class="hidden-text"></p>
             </div>
         </section>
 
-        <!-- Success Message -->
         <section class="hidden" id="success">
-            <div class="success-container">
-                <div class="celebration-confetti"></div>
-                <h1 class="celebration-text">🎉 YES! 🎉</h1>
-                <p>You've just made me the happiest soul in the entire universe! 💕</p>
-                <div class="love-message">
-                    <p>I love you with all my heart, Yukta! 💞</p>
-                    <p>Every moment with you is a beautiful dream I never want to wake from...</p>
-                    <p>Forever, yours, in love and devotion. 💍✨</p>
-                </div>
-                <button class="cute-btn" onclick="location.reload()">Relive It Again 🔄</button>
+            <div class="celebration-confetti"></div>
+            <h1 class="celebration-text handwritten">Forever! 🎉</h1>
+            <div class="love-message">
+                <p>I love you infinitely, Yukta. 💞</p>
             </div>
         </section>
     </div>
