@@ -20,32 +20,6 @@ function showSection(idx) {
     const el = document.getElementById(sections[idx]);
     if (el) el.classList.remove('hidden');
     currentIndex = idx;
-
-    // reset interactive bits when entering certain sections
-    if (sections[idx] === 'annoying') {
-        // reset NO button to its original flow position
-        const btn = document.getElementById('noBtn');
-        if (btn) {
-            btn.style.position = '';
-            btn.style.left = '';
-            btn.style.top = '';
-            btn.style.transform = '';
-        }
-        // reset YES size
-        yesSize = 1;
-        const yes = document.getElementById('yesBtn');
-        if (yes) yes.style.transform = 'scale(1)';
-    }
-    // If entering proposal, make sure buttons are ready
-    if (sections[idx] === 'proposal') {
-        const surpriseBtn = document.querySelector('.surprise-btn');
-        if (surpriseBtn) {
-            surpriseBtn.style.pointerEvents = 'auto';
-        }
-        // focus the positive button so accidental taps don't hit surprise
-        const yesProp = document.querySelector('.yes-proposal');
-        if (yesProp) yesProp.focus && yesProp.focus();
-    }
 }
 
 // --- Fun facts ---
@@ -62,11 +36,6 @@ function showRandomFact() {
     p.textContent = facts[Math.floor(Math.random() * facts.length)];
 }
 
-// --- Reason card reveal animation ---
-function revealReason(card) {
-    card.classList.toggle('revealed');
-}
-
 // --- No button avoidance & Yes growth ---
 let yesSize = 1; // scale multiplier
 let noAttempts = 0;
@@ -75,80 +44,44 @@ function moveButton(e) {
     // Called on mouseover of NO button. Move it to a random nearby position.
     const btn = document.getElementById('noBtn');
     noAttempts += 1;
-    if (!btn) return;
 
-    // Determine container bounds (position relative to the .button-container)
-    const container = btn.parentElement;
-    const cRect = container.getBoundingClientRect();
-    const btnW = btn.offsetWidth;
-    const btnH = btn.offsetHeight;
+    // If user somehow clicks NO quickly, fallback handled in youSaid
+    const parent = btn.parentElement.getBoundingClientRect();
+    const safeArea = {
+        left: 0,
+        top: 0,
+        right: window.innerWidth - btn.offsetWidth,
+        bottom: window.innerHeight - btn.offsetHeight
+    };
 
-    // pick a position fully inside the container (avoid overflow)
-    const maxX = Math.max(0, cRect.width - btnW);
-    const maxY = Math.max(0, cRect.height - btnH);
+    // pick a new location biased away from cursor
+    const x = Math.max(0, Math.min(safeArea.right, Math.random() * window.innerWidth));
+    const y = Math.max(0, Math.min(safeArea.bottom, Math.random() * (window.innerHeight - 100) + 50));
 
-    // Try to avoid overlapping the yes button
-    const yes = document.getElementById('yesBtn');
-    const yesRect = yes ? yes.getBoundingClientRect() : null;
-
-    let attempt = 0;
-    let newX, newY;
-    do {
-        newX = Math.floor(Math.random() * maxX);
-        newY = Math.floor(Math.random() * maxY);
-        attempt++;
-        if (attempt > 20) break;
-    } while (yesRect && overlaps({left: cRect.left + newX, top: cRect.top + newY, width: btnW, height: btnH}, yesRect));
-
-    // position the button at the container origin and move using transform for GPU-accelerated animation
     btn.style.position = 'absolute';
-    btn.style.left = '0px';
-    btn.style.top = '0px';
-    // avoid accidental clicks while we animate
-    btn.style.pointerEvents = 'none';
-    btn.style.transform = `translate(${newX}px, ${newY}px)`;
-    // restore pointer events after the CSS transition completes
-    setTimeout(() => { btn.style.pointerEvents = 'auto'; }, 320);
+    btn.style.left = x + 'px';
+    btn.style.top = y + 'px';
 
     // Make the YES button grow a bit every time the NO button dodges
     growYes();
 }
 
-function overlaps(a, b) {
-    return !(a.left + a.width < b.left || a.left > b.left + b.width || a.top + a.height < b.top || a.top > b.top + b.height);
-}
-
 function growYes() {
-    yesSize = Math.min(2.0, yesSize + 0.09); // cap growth
+    yesSize += 0.08; // scale up
     const yes = document.getElementById('yesBtn');
-    if (yes) {
-        yes.style.transition = 'transform 220ms cubic-bezier(.2,.9,.2,1)';
-        yes.style.transform = `scale(${yesSize})`;
-        yes.style.zIndex = 999; // keep it above the moving NO
-    }
+    yes.style.transform = `scale(${yesSize})`;
 }
 
 function youSaid(choice) {
     const res = document.getElementById('result-message');
     if (choice === 'yes') {
         // celebrate and move to proposal
-    res.textContent = "You chose LOVE — I always believed in us. 💖";
-    res.classList.add('good');
-    // small pop effect on YES
-    const yes = document.getElementById('yesBtn');
-            if (yes) yes.animate([{ transform: `scale(${Math.min(2.2, yesSize + 0.2)})` }, { transform: 'scale(1.1)' }], { duration: 500, easing: 'ease-out' });
-            // prevent spurious clicks while animating
-            const no = document.getElementById('noBtn');
-            if (yes) yes.disabled = true;
-            if (no) no.disabled = true;
-            setTimeout(() => {
-                showSection(4);
-                if (yes) yes.disabled = false;
-                if (no) no.disabled = false;
-            }, 700);
+        res.textContent = "You chose LOVE — I knew it! 💖";
+        res.classList.add('good');
+        setTimeout(() => showSection(4), 900);
     } else {
         // if NO somehow clicked, playful tease and nudge back
-    res.textContent = "No? Hmm... are you teasing me? Try again 😊";
+        res.textContent = "No? Hmm... try again 😊";
         res.classList.remove('good');
         // slightly shrink the NO button as a playful consequence
         const btn = document.getElementById('noBtn');
@@ -163,23 +96,10 @@ function sheYes() {
     startConfetti();
 }
 
-function surpriseMe() {
-    const surprises = [
-        "🌹 Did you know? Your laugh is scientifically proven to be my favorite sound.",
-        "💝 Fun fact: Every moment with you feels like a scene from a romantic movie.",
-        "✨ Secret: You're the reason I believe in soulmates.",
-        "🎵 Truth: You inspire all my best ideas and dreams.",
-        "💫 Reality: My heart literally skips a beat when you smile.",
-        "🌟 Knowledge: You're already my greatest love story.",
-        "🎀 Confession: I fall for you more every single day.",
-        "💖 Promise: Forever isn't long enough with you."
-    ];
-    const display = document.getElementById('surprise-display');
-    const randomSurprise = surprises[Math.floor(Math.random() * surprises.length)];
-    display.classList.remove('hidden-text');
-    display.textContent = randomSurprise;
-    display.style.animation = 'none';
-    setTimeout(() => { display.style.animation = 'surpriseReveal 0.6s ease-out'; }, 10);
+function maybeWho() {
+    const msg = document.getElementById('proposal-message');
+    msg.classList.remove('hidden-text');
+    msg.textContent = "If you'd like, tell me one thing you love about us and I'll keep it forever. 💌";
 }
 
 // --- Simple confetti/hearts ---
@@ -196,20 +116,6 @@ function startConfetti() {
         // remove after animation
         setTimeout(() => el.remove(), 4000);
     }
-}
-
-// allow sending a little reply on proposal
-function sendReply() {
-    const input = document.getElementById('replyInput');
-    const display = document.getElementById('replyDisplay');
-    if (!input || !display) return;
-    const text = input.value.trim();
-    if (!text) {
-        display.textContent = "A little note would be lovely... 💌";
-        return;
-    }
-    display.textContent = `Yukta wrote: "${text}" — that made my day. 💖`;
-    input.value = '';
 }
 
 // --- Page polish on load ---
