@@ -90,9 +90,12 @@ function moveButton(e) {
 }
 
 function growYes() {
-    yesSize += 0.08; // scale up
+    // gently increase yesSize but clamp it so it doesn't grow unbounded
+    yesSize = Math.min(1.8, yesSize + 0.06); // max 1.8x
     const yes = document.getElementById('yesBtn');
-    yes.style.transform = `scale(${yesSize})`;
+    if (!yes) return;
+    // apply scale using CSS variable so other transforms (translateY) can compose
+    yes.style.setProperty('--scale', yesSize.toFixed(3));
 }
 
 function youSaid(choice) {
@@ -151,10 +154,19 @@ window.addEventListener('load', () => {
     sections.forEach(id => document.getElementById(id).classList.add('hidden'));
     document.getElementById('intro').classList.remove('hidden');
 
-    // small pulsing on the yes button occasionally
+    // small pulsing on the yes button occasionally — animate a temporary overlay pulse
     setInterval(() => {
         const yes = document.getElementById('yesBtn');
-        yes.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.08)' }, { transform: 'scale(1)' }], { duration: 1500 });
+        // animate using composite transform that includes the current CSS variable --scale
+        // We cannot directly animate CSS variables with WAAPI, so we simulate a subtle pulse by animating a transient scale multiplier
+        const base = parseFloat(getComputedStyle(yes).getPropertyValue('--scale')) || 1;
+        const pulseUp = base * 1.06;
+        const animation = yes.animate([
+            { transform: `translateY(var(--ty,0)) scale(${base})` },
+            { transform: `translateY(var(--ty,0)) scale(${pulseUp})` },
+            { transform: `translateY(var(--ty,0)) scale(${base})` }
+        ], { duration: 1200, easing: 'ease-in-out' });
+        // no need to change CSS var; animation is transient
     }, 3000);
 });
 
