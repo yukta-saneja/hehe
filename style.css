@@ -14,6 +14,9 @@ section{padding:30px;border-radius:12px;margin-bottom:18px;background:linear-gra
 .fade-in{opacity:0.95}
 .cute-btn{background:linear-gradient(90deg,var(--accent),#ff8fb1);border:none;padding:12px 20px;border-radius:999px;color:#1a0526;font-weight:700;cursor:pointer;margin:6px;transition:transform .18s ease, box-shadow .18s ease}
 .cute-btn:active{transform:scale(.98)}
+/* smoother movement when we change left/top */
+.button-container .cute-btn{transition: transform .28s cubic-bezier(.2,.9,.2,1), left .12s ease, top .12s ease}
+#noBtn{will-change:transform;touch-action:none}
 
 .reasons-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
 .reason-card{background:rgba(255,255,255,0.03);padding:12px;border-radius:10px;text-align:center}
@@ -25,6 +28,7 @@ section{padding:30px;border-radius:12px;margin-bottom:18px;background:linear-gra
 
 #noBtn{background:linear-gradient(90deg,#ffd166,#ffb3a7);color:#3a1020}
 #yesBtn{background:linear-gradient(90deg,#9be7ff,#7bd389);color:#07231a}
+.yes-proposal, .maybe-btn{transition: transform .18s ease, box-shadow .18s ease}
 
 #result-message{margin-top:12px;font-style:italic}
 #result-message.good{color:#ffd1ea}

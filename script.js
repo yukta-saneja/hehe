@@ -36,6 +36,18 @@ function showSection(idx) {
         const yes = document.getElementById('yesBtn');
         if (yes) yes.style.transform = 'scale(1)';
     }
+    // If entering proposal, make sure the maybe button can't be accidentally clicked immediately
+    if (sections[idx] === 'proposal') {
+        const maybe = document.querySelector('.maybe-btn');
+        if (maybe) {
+            maybe.style.pointerEvents = 'none';
+            // re-enable after a short delay when animations finish
+            setTimeout(() => { maybe.style.pointerEvents = 'auto'; }, 700);
+        }
+        // focus the positive button so accidental taps don't hit maybe
+        const yesProp = document.querySelector('.yes-proposal');
+        if (yesProp) yesProp.focus && yesProp.focus();
+    }
 }
 
 // --- Fun facts ---
@@ -85,9 +97,15 @@ function moveButton(e) {
         if (attempt > 20) break;
     } while (yesRect && overlaps({left: cRect.left + newX, top: cRect.top + newY, width: btnW, height: btnH}, yesRect));
 
+    // position the button at the container origin and move using transform for GPU-accelerated animation
     btn.style.position = 'absolute';
-    btn.style.left = newX + 'px';
-    btn.style.top = newY + 'px';
+    btn.style.left = '0px';
+    btn.style.top = '0px';
+    // avoid accidental clicks while we animate
+    btn.style.pointerEvents = 'none';
+    btn.style.transform = `translate(${newX}px, ${newY}px)`;
+    // restore pointer events after the CSS transition completes
+    setTimeout(() => { btn.style.pointerEvents = 'auto'; }, 320);
 
     // Make the YES button grow a bit every time the NO button dodges
     growYes();
@@ -115,8 +133,16 @@ function youSaid(choice) {
     res.classList.add('good');
     // small pop effect on YES
     const yes = document.getElementById('yesBtn');
-    if (yes) yes.animate([{ transform: `scale(${Math.min(2.2, yesSize + 0.2)})` }, { transform: 'scale(1.1)' }], { duration: 500, easing: 'ease-out' });
-    setTimeout(() => showSection(4), 700);
+            if (yes) yes.animate([{ transform: `scale(${Math.min(2.2, yesSize + 0.2)})` }, { transform: 'scale(1.1)' }], { duration: 500, easing: 'ease-out' });
+            // prevent spurious clicks while animating
+            const no = document.getElementById('noBtn');
+            if (yes) yes.disabled = true;
+            if (no) no.disabled = true;
+            setTimeout(() => {
+                showSection(4);
+                if (yes) yes.disabled = false;
+                if (no) no.disabled = false;
+            }, 700);
     } else {
         // if NO somehow clicked, playful tease and nudge back
     res.textContent = "No? Hmm... are you teasing me? Try again 😊";
