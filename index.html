@@ -13,9 +13,9 @@
         <!-- Intro Section -->
         <section class="intro" id="intro">
             <div class="message-box">
-                <h1 class="typewriter">Hi Yukta! 💕</h1>
-                <p class="fade-in">I have something special to ask you...</p>
-                <button class="cute-btn" onclick="startJourney()">Click Me! 🎀</button>
+                <h1 class="typewriter">My Dearest Yukta 💕</h1>
+                <p class="fade-in">Every moment with you feels like a beautiful story — may I share the next chapter with you?</p>
+                <button class="cute-btn" onclick="startJourney()">Yes, show me 💌</button>
             </div>
         </section>
 
@@ -68,11 +68,11 @@
         <!-- The Annoying Part (Playful Pop-ups) -->
         <section class="hidden" id="annoying">
             <div class="annoying-container">
-                <h2>A Little Annoying Game 😄</h2>
-                <p>Try to hit "No"... if you can! 😉</p>
+                <h2>A Playful Question 😄</h2>
+                <p>Just a tiny challenge — can you press NO? (It's okay, I trust your heart.) 😉</p>
                 <div class="button-container">
-                    <button class="cute-btn yes-btn" onclick="youSaid('yes')">YES! 💚</button>
-                    <button class="cute-btn no-btn" id="noBtn" onmouseover="moveButton()" onclick="youSaid('no')">NO 😒</button>
+                    <button class="cute-btn yes-btn" id="yesBtn" onclick="youSaid('yes')">YES! 💚</button>
+                    <button class="cute-btn no-btn" id="noBtn" onmouseover="moveButton(event)" ontouchstart="moveButton(event); return false;" onclick="youSaid('no')">NO 😒</button>
                 </div>
                 <p id="result-message"></p>
             </div>
@@ -83,12 +83,17 @@
             <div class="proposal-container">
                 <div class="floating-hearts"></div>
                 <h2 class="big-text">Yukta... 💕</h2>
-                <p class="proposal-text">Will you be my Valentine?</p>
+                <p class="proposal-text">Will you be my Valentine? I have always imagined saying this to you.</p>
                 <div class="proposal-buttons">
                     <button class="cute-btn yes-proposal" onclick="sheYes()">YES YES YES! 💕</button>
                     <button class="cute-btn maybe-btn" onclick="maybeWho()">Maybe 😊</button>
                 </div>
                 <p id="proposal-message" class="hidden-text"></p>
+                <div class="reply-box" style="margin-top:14px;">
+                    <input id="replyInput" placeholder="Write a sweet line..." style="padding:8px 10px;border-radius:8px;border:none;min-width:220px;"> 
+                    <button class="cute-btn" onclick="sendReply()">Send 💌</button>
+                    <div id="replyDisplay" style="margin-top:8px;font-style:italic;color:#ffdfe9"></div>
+                </div>
             </div>
         </section>
 
