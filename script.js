@@ -20,6 +20,19 @@ function showSection(idx) {
     const el = document.getElementById(sections[idx]);
     if (el) el.classList.remove('hidden');
     currentIndex = idx;
+    
+    // Add click-to-reveal functionality for reason cards
+    if (idx === 1) {
+        setTimeout(() => {
+            const cards = document.querySelectorAll('.reason-card');
+            cards.forEach((card, index) => {
+                card.style.animation = `none`;
+                card.onclick = () => {
+                    card.classList.toggle('revealed');
+                };
+            });
+        }, 100);
+    }
 }
 
 // --- Romantic facts ---
@@ -53,20 +66,22 @@ function moveButton(e) {
     const btn = document.getElementById('noBtn');
     noAttempts += 1;
 
-    // If user somehow clicks NO quickly, fallback handled in youSaid
+    // Get the parent container bounds (button-container)
     const parent = btn.parentElement.getBoundingClientRect();
+    
+    // Constrain movement within the parent container
     const safeArea = {
-        left: 0,
-        top: 0,
-        right: window.innerWidth - btn.offsetWidth,
-        bottom: window.innerHeight - btn.offsetHeight
+        left: parent.left,
+        top: parent.top,
+        right: parent.right - btn.offsetWidth,
+        bottom: parent.bottom - btn.offsetHeight
     };
 
-    // pick a new location biased away from cursor
-    const x = Math.max(0, Math.min(safeArea.right, Math.random() * window.innerWidth));
-    const y = Math.max(0, Math.min(safeArea.bottom, Math.random() * (window.innerHeight - 100) + 50));
+    // pick a new location within the parent container
+    const x = Math.max(safeArea.left, Math.min(safeArea.right, parent.left + Math.random() * (parent.width - btn.offsetWidth)));
+    const y = Math.max(safeArea.top, Math.min(safeArea.bottom, parent.top + Math.random() * (parent.height - btn.offsetHeight)));
 
-    btn.style.position = 'absolute';
+    btn.style.position = 'fixed';
     btn.style.left = x + 'px';
     btn.style.top = y + 'px';
 
