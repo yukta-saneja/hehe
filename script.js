@@ -36,15 +36,13 @@ function showSection(idx) {
         const yes = document.getElementById('yesBtn');
         if (yes) yes.style.transform = 'scale(1)';
     }
-    // If entering proposal, make sure the maybe button can't be accidentally clicked immediately
+    // If entering proposal, make sure buttons are ready
     if (sections[idx] === 'proposal') {
-        const maybe = document.querySelector('.maybe-btn');
-        if (maybe) {
-            maybe.style.pointerEvents = 'none';
-            // re-enable after a short delay when animations finish
-            setTimeout(() => { maybe.style.pointerEvents = 'auto'; }, 700);
+        const surpriseBtn = document.querySelector('.surprise-btn');
+        if (surpriseBtn) {
+            surpriseBtn.style.pointerEvents = 'auto';
         }
-        // focus the positive button so accidental taps don't hit maybe
+        // focus the positive button so accidental taps don't hit surprise
         const yesProp = document.querySelector('.yes-proposal');
         if (yesProp) yesProp.focus && yesProp.focus();
     }
@@ -165,10 +163,23 @@ function sheYes() {
     startConfetti();
 }
 
-function maybeWho() {
-    const msg = document.getElementById('proposal-message');
-    msg.classList.remove('hidden-text');
-    msg.textContent = "If you'd like, tell me one thing you love about us and I'll keep it forever. 💌";
+function surpriseMe() {
+    const surprises = [
+        "🌹 Did you know? Your laugh is scientifically proven to be my favorite sound.",
+        "💝 Fun fact: Every moment with you feels like a scene from a romantic movie.",
+        "✨ Secret: You're the reason I believe in soulmates.",
+        "🎵 Truth: You inspire all my best ideas and dreams.",
+        "💫 Reality: My heart literally skips a beat when you smile.",
+        "🌟 Knowledge: You're already my greatest love story.",
+        "🎀 Confession: I fall for you more every single day.",
+        "💖 Promise: Forever isn't long enough with you."
+    ];
+    const display = document.getElementById('surprise-display');
+    const randomSurprise = surprises[Math.floor(Math.random() * surprises.length)];
+    display.classList.remove('hidden-text');
+    display.textContent = randomSurprise;
+    display.style.animation = 'none';
+    setTimeout(() => { display.style.animation = 'surpriseReveal 0.6s ease-out'; }, 10);
 }
 
 // --- Simple confetti/hearts ---

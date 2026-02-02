@@ -38,7 +38,11 @@ section{padding:30px;border-radius:12px;margin-bottom:18px;background:linear-gra
 
 #noBtn{background:linear-gradient(90deg,#ffd166,#ffb3a7);color:#3a1020}
 #yesBtn{background:linear-gradient(90deg,#9be7ff,#7bd389);color:#07231a}
-.yes-proposal, .maybe-btn{transition: transform .18s ease, box-shadow .18s ease}
+.yes-proposal, .surprise-btn{transition: transform .18s ease, box-shadow .18s ease}
+.surprise-btn{background:linear-gradient(90deg,#ffc0d9,#ffb6e1);color:#4a0c4a;font-weight:700}
+.surprise-btn:hover{box-shadow:0 4px 12px rgba(255,192,217,0.4)}
+.surprise-box{margin-top:14px;padding:12px;background:rgba(255,192,217,0.1);border-radius:10px;border-left:3px solid #ffb6e1;color:#ffd1ea;animation:surpriseReveal .6s ease-out}
+@keyframes surpriseReveal{0%{opacity:0;transform:translateY(-10px);filter:blur(4px)}100%{opacity:1;transform:translateY(0);filter:blur(0)}}
 
 #result-message{margin-top:12px;font-style:italic}
 #result-message.good{color:#ffd1ea}
